@@ -9,7 +9,7 @@
   "pwaURL": "https://letwd.github.io/lwd-pwa",
   "pwaSupport": ["android", "IOS","chromeOS"],
 
-  "electronURL": ",
+  "electronURL": "",
   "electronSupport": [],
 
   "leoURL": "https://github.com/LetWD/lwd-electron/releases/download/V.1.01/LWD_Setup.exe",
