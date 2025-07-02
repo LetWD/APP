@@ -7,7 +7,7 @@
   "requireLEO": "Y",
 
   "pwaURL": "https://letwd.github.io/lwd-pwa",
-  "pwaSupport": ["android", "iOS","chromeOS"],
+  "pwaSupport": ["android", "ios","chromeOS"],
 
   "electronURL": "",
   "electronSupport": [],
