@@ -29,18 +29,32 @@
       border-radius: 1rem;
       margin-bottom: 1.5rem;
     }
+    .links {
+      margin-bottom: 1rem;
+    }
     .links button {
-      background: #333;
-      color: white;
       padding: 0.6rem 1rem;
       border: none;
       border-radius: 0.5rem;
-      margin-right: 1rem;
+      margin: 0.25rem 1rem 0.25rem 0;
       cursor: pointer;
     }
-    .links button:disabled {
+    .btn-supported {
+      background: #22cc88;
+      color: #fff;
+    }
+    .btn-unsupported {
+      background: #cc4444;
+      color: #fff;
+    }
+    .btn-unsupported:disabled {
       background: #555;
       cursor: not-allowed;
+    }
+    .os-label {
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-bottom: 1rem;
     }
     .markdown {
       margin-top: 2rem;
@@ -55,9 +69,21 @@
     const params = new URLSearchParams(window.location.search);
     const appId = params.get("id");
 
+    const detectClientOS = () => {
+      const ua = navigator.userAgent.toLowerCase();
+      if (ua.includes("android")) return "Android";
+      if (/iphone|ipad/.test(ua)) return "iOS";
+      if (ua.includes("windows")) return "Windows";
+      if (ua.includes("macintosh") || ua.includes("mac os")) return "macOS";
+      if (ua.includes("linux")) return "Linux";
+      if (ua.includes("cros")) return "ChromeOS";
+      return "Unknown OS";
+    };
+
     if (!appId) {
-      document.getElementById("app").innerHTML = '<p>앱 ID가 지정되지 않았습니다.</p>';
-    } else {
+  // 앱 ID가 없으면 루트 페이지로 리디렉션
+  location.href = "/";
+} else {
       fetch(`${appId}.json`)
         .then(res => res.json())
         .then(data => {
@@ -80,35 +106,29 @@
           let html = `
             <h1>${data.name}</h1>
             <div class="meta">v${data.version} · ${data.lastUpdate}</div>
+            <div class="os-label">현재 접속한 OS: ${detectClientOS()}</div>
             <img class="screenshot" src="${data.screenshot}" alt="Screenshot" />
             <div class="links">
           `;
 
-          if (data.pwaURL) {
-            if (Array.isArray(data.pwaSupport)) {
-              const isSupported = supportMatch(data.pwaSupport);
-              html += `<button onclick="location.href='${data.pwaURL}'" ${isSupported ? "" : "disabled"}>PWA 열기</button>`;
-            } else {
-              html += `<button onclick="location.href='${data.pwaURL}'">PWA 열기</button>`;
-            }
+          if (data.pwaURL && Array.isArray(data.pwaSupport)) {
+            const isSupported = supportMatch(data.pwaSupport);
+            html += `<button class="${isSupported ? 'btn-supported' : 'btn-unsupported'}" onclick="location.href='${data.pwaURL}'" ${isSupported ? "" : "disabled"}>PWA 열기</button>`;
           }
 
-          if (data.electronURL) {
-            if (Array.isArray(data.electronSupport)) {
-              const isSupported = supportMatch(data.electronSupport);
-              html += `<button onclick="location.href='${data.electronURL}'" ${isSupported ? "" : "disabled"}>Electron 다운로드</button>`;
-            } else {
-              html += `<button onclick="location.href='${data.electronURL}'">Electron 다운로드</button>`;
-            }
+          if (data.electronURL && Array.isArray(data.electronSupport)) {
+            const isSupported = supportMatch(data.electronSupport);
+            html += `<button class="${isSupported ? 'btn-supported' : 'btn-unsupported'}" onclick="location.href='${data.electronURL}'" ${isSupported ? "" : "disabled"}>Electron 다운로드</button>`;
           }
 
-          if (data.nwjsURL) {
-            if (Array.isArray(data.nwjsSupport)) {
-              const isSupported = supportMatch(data.nwjsSupport);
-              html += `<button onclick="location.href='${data.nwjsURL}'" ${isSupported ? "" : "disabled"}>NW.js 다운로드</button>`;
-            } else {
-              html += `<button onclick="location.href='${data.nwjsURL}'">NW.js 다운로드</button>`;
-            }
+          if (data.leoURL && Array.isArray(data.leoSupport)) {
+            const isSupported = supportMatch(data.leoSupport);
+            html += `<button class="${isSupported ? 'btn-supported' : 'btn-unsupported'}" onclick="location.href='${data.leoURL}'" ${isSupported ? "" : "disabled"}>LEO 다운로드</button>`;
+          }
+
+          if (data.nwjsURL && Array.isArray(data.nwjsSupport)) {
+            const isSupported = supportMatch(data.nwjsSupport);
+            html += `<button class="${isSupported ? 'btn-supported' : 'btn-unsupported'}" onclick="location.href='${data.nwjsURL}'" ${isSupported ? "" : "disabled"}>NW.js 다운로드</button>`;
           }
 
           html += `</div>`;
@@ -117,7 +137,6 @@
             html += `<p style="color:#f88; margin-top:1rem;">⚠️ 이 앱은 LEO 설치가 필요합니다.</p>`;
           }
 
-          // 줄바꿈 문자 변환
           const cleanDesc = (data.description || "")
             .replace(/\\n/g, "\n")
             .replace(/\/n/g, "\n")
@@ -129,7 +148,7 @@
           container.innerHTML = html;
         })
         .catch(err => {
-          document.getElementById("app").innerHTML = '<p>앱 정보를 불러오는 데 실패했습니다.</p>';
+          document.getElementById("app").innerHTML = '<p>존재하지 않는 앱 입니다.</p>';
           console.error(err);
         });
     }
