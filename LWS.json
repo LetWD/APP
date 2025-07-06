@@ -1,0 +1,20 @@
+{
+  "name": "Let We Study",
+  "version": "1.0.0",
+  "lastUpdate": "2025-07-01",
+  "screenshot": "",
+  "description": "# LWD를 소개합니다!! /n LWD는 Let We Do 의 준말입니다! /n LWD는 국어, 영어, 수학, 사회, 과학의 과목을 지원합니다! /n LWD에서는 문제 풀이와 (ai 피드백) 자신의 수준 검사도 가능합니다! /n ## LWD는 Pwa, LEO를 지원합니다! /n OS는 Pwa : IOS, Android, Chromeos /n LEO : Windows (x64) 를 지원합니다! /n ## 그럼 Linux, Macos에서는 작동하지 않는가요? /n 네, 공식적으로 아직까지는 LEO가 Linux, MacOS를 지원하지 않아서 그렇습니다. 대신 Electron 자체는 Linux, Macos를 지원하니, 직접 빌드해서 사용하실 수는 있습니다. 자세한 내용은 https://v.gd/lwdReactV101 <= 여길 참고해주세요! /n ## 그럼 다운로드를 해볼까요?",
+  "requireLEO": "Y",
+
+  "pwaURL": "https://letwd.github.io/lws-pwa",
+  "pwaSupport": ["android", "ios","chromeOS"],
+
+  "electronURL": "",
+  "electronSupport": [],
+
+  "leoURL": "",
+  "leoSupport": ["winX86"],
+
+  "nwjsURL": "",
+  "nwjsSupport":[]
+}
